@@ -1,0 +1,4 @@
+// Placeholder — add Mongoose models here.
+// Example: export { default as Post } from './Post.js';
+
+export {};

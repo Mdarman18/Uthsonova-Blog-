@@ -1,0 +1,4 @@
+// Placeholder — add route controllers here.
+// Keep controllers thin: validate input, call a service, return a response.
+
+export {};

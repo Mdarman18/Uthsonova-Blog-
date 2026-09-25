@@ -1,0 +1,5 @@
+// Placeholder — add domain-specific service functions here.
+// Services contain business logic that controllers delegate to,
+// keeping controllers thin and services independently testable.
+
+export {};

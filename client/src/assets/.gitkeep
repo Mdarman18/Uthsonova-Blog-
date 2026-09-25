@@ -1,0 +1,4 @@
+// Drop static image/svg/font assets here.
+// Vite handles all asset imports natively — no config needed.
+// Example usage in a component:
+//   import logo from '../assets/logo.svg';

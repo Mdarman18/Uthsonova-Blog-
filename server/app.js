@@ -1,0 +1,27 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+
+import { corsOptions } from './src/config/cors.js';
+import { errorHandler } from './src/middlewares/errorHandler.js';
+import { notFound } from './src/middlewares/notFound.js';
+import apiRoutes from './src/routes/index.js';
+
+const app = express();
+
+// ── Core middlewares ──────────────────────────────────────────────────────────
+app.use(helmet());
+app.use(cors(corsOptions));
+app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ── Routes ────────────────────────────────────────────────────────────────────
+app.use('/api', apiRoutes);
+
+// ── Error handling ────────────────────────────────────────────────────────────
+app.use(notFound);
+app.use(errorHandler);
+
+export default app;

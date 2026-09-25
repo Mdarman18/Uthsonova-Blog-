@@ -1,0 +1,13 @@
+# ── Both workspaces ───────────────────────────────────────────────────────────
+node_modules/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+coverage/
+dist/
+build/
