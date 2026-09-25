@@ -1,6 +1,16 @@
+
 import { Router } from 'express';
-import { createBlog, getAllBlogs, getBlogById, updateBlog, deleteBlog } from '../controllers/blogController.js';
+
+import {
+    createBlog,
+    getAllBlogs,
+    getBlogById,
+    updateBlog,
+    deleteBlog,
+} from '../controllers/blogController.js';
+
 import { protect } from '../middlewares/auth.js';
+import { authorize } from '../middlewares/authorize.js';
 import { blogValidation } from '../validators/blog_validation.js';
 import { validate } from '../middlewares/validate.js';
 
@@ -21,7 +31,7 @@ const router = Router();
  *     tags: [Blogs]
  *     responses:
  *       200:
- *         description: List of blogs
+ *         description: List of published blogs
  */
 router.get('/', getAllBlogs);
 
@@ -31,6 +41,8 @@ router.get('/', getAllBlogs);
  *   get:
  *     summary: Get a single blog by ID
  *     tags: [Blogs]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -40,19 +52,18 @@ router.get('/', getAllBlogs);
  *     responses:
  *       200:
  *         description: The blog object
+ *       401:
+ *         description: Authentication required
  *       404:
  *         description: Blog not found
  */
-router.get('/:id', getBlogById);
-
-// All routes below require authentication
-router.use(protect);
+router.get('/:id', protect, getBlogById);
 
 /**
  * @swagger
  * /api/blogs:
  *   post:
- *     summary: Create a new blog
+ *     summary: Create a new blog (Admin only)
  *     tags: [Blogs]
  *     security:
  *       - bearerAuth: []
@@ -82,14 +93,25 @@ router.use(protect);
  *         description: Blog created successfully
  *       400:
  *         description: Validation error
+ *       401:
+ *         description: Authentication required
+ *       403:
+ *         description: Admin access required
  */
-router.post('/', blogValidation, validate, createBlog);
+router.post(
+    '/',
+    protect,
+    authorize('admin'),
+    blogValidation,
+    validate,
+    createBlog
+);
 
 /**
  * @swagger
  * /api/blogs/{id}:
  *   put:
- *     summary: Update an existing blog
+ *     summary: Update a blog (Admin only)
  *     tags: [Blogs]
  *     security:
  *       - bearerAuth: []
@@ -118,19 +140,28 @@ router.post('/', blogValidation, validate, createBlog);
  *                 type: string
  *     responses:
  *       200:
- *         description: Blog updated
+ *         description: Blog updated successfully
+ *       401:
+ *         description: Authentication required
  *       403:
- *         description: Unauthorized to update this blog
+ *         description: Admin access required
  *       404:
  *         description: Blog not found
  */
-router.put('/:id', blogValidation, validate, updateBlog);
+router.put(
+    '/:id',
+    protect,
+    authorize('admin'),
+    blogValidation,
+    validate,
+    updateBlog
+);
 
 /**
  * @swagger
  * /api/blogs/{id}:
  *   delete:
- *     summary: Delete a blog
+ *     summary: Delete a blog (Admin only)
  *     tags: [Blogs]
  *     security:
  *       - bearerAuth: []
@@ -143,11 +174,18 @@ router.put('/:id', blogValidation, validate, updateBlog);
  *     responses:
  *       200:
  *         description: Blog deleted successfully
+ *       401:
+ *         description: Authentication required
  *       403:
- *         description: Unauthorized to delete this blog
+ *         description: Admin access required
  *       404:
  *         description: Blog not found
  */
-router.delete('/:id', deleteBlog);
+router.delete(
+    '/:id',
+    protect,
+    authorize('admin'),
+    deleteBlog
+);
 
 export default router;
