@@ -7,6 +7,7 @@ import { corsOptions } from './src/config/cors.js';
 import { errorHandler } from './src/middlewares/errorHandler.js';
 import { notFound } from './src/middlewares/notFound.js';
 import apiRoutes from './src/routes/index.js';
+import { setupSwagger } from './src/swagger.js';
 
 const app = express();
 
@@ -16,6 +17,9 @@ app.use(cors(corsOptions));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// ── Swagger Documentation ─────────────────────────────────────────────────────
+setupSwagger(app);
 
 // ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api', apiRoutes);
