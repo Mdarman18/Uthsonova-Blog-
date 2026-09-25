@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import { register, login } from '../controllers/authController.js';
+import { register, login, getMe } from '../controllers/authController.js';
 import { registerValidation } from '../validators/Register_validation.js';
 import { validate } from '../middlewares/validate.js';
+import { protect } from '../middlewares/auth.js';
 
 const router = Router();
 
@@ -73,5 +74,21 @@ router.post('/register', registerValidation, validate, register);
  *         description: Incorrect email or password
  */
 router.post('/login', login);
+
+/**
+ * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Get current authenticated user
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user returned
+ *       401:
+ *         description: Not authenticated
+ */
+router.get('/me', protect, getMe);
 
 export default router;
