@@ -46,3 +46,11 @@ export const loginUser = async ({ email, password }) => {
 
     return { user, token };
 };
+
+export const getUserById = async (id) => {
+    const user = await User.findById(id);
+    if (!user) {
+        throw new AppError('User not found', 404);
+    }
+    return user;
+};

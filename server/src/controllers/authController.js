@@ -32,3 +32,18 @@ export const login = catchAsync(async (req, res, next) => {
         },
     });
 });
+
+export const getMe = catchAsync(async (req, res, next) => {
+    const user = await authService.getUserById(req.user.id);
+    
+    res.status(200).json({
+        success: true,
+        data: {
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+            },
+        }
+    });
+});
