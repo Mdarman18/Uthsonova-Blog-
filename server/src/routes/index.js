@@ -1,6 +1,7 @@
 import { Router } from 'express';
-
 import authRoutes from './authRoutes.js';
+import adminRoutes from './adminRoutes.js';
+import blogRoutes from './blogRoutes.js';
 
 const router = Router();
 
@@ -11,5 +12,11 @@ router.get('/health', (_req, res) => {
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
 router.use('/auth', authRoutes);
+
+// ── Admin ─────────────────────────────────────────────────────────────────────
+router.use('/admin', adminRoutes);
+
+// ── Blogs ─────────────────────────────────────────────────────────────────────
+router.use('/blogs', blogRoutes);
 
 export default router;
